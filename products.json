@@ -1,0 +1,62 @@
+[
+  {
+    "id": "p1",
+    "name": "Classic Chocolate Brownie",
+    "price": 70,
+    "category": "classic",
+    "description": "Our signature rich, fudgy chocolate brownie with a perfectly crackled top.",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 5,
+    "isBestSeller": true
+  },
+  {
+    "id": "p2",
+    "name": "Nutella Lava Brownie",
+    "price": 90,
+    "category": "stuffed",
+    "description": "A decadent brownie stuffed with a gooey Nutella center that melts in your mouth.",
+    "image": "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 10,
+    "isBestSeller": true
+  },
+  {
+    "id": "p3",
+    "name": "Choco Fudge Brownie",
+    "price": 80,
+    "category": "fudge",
+    "description": "Extra dense and incredibly fudgy, topped with a luscious chocolate ganache.",
+    "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 8,
+    "isBestSeller": true
+  },
+  {
+    "id": "p4",
+    "name": "Dark Chocolate Brownie",
+    "price": 85,
+    "category": "dark",
+    "description": "For the true chocolate lover. Made with premium 70% dark cocoa for intense flavor.",
+    "image": "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 6,
+    "isBestSeller": false
+  },
+  {
+    "id": "p5",
+    "name": "Caramel Brownie",
+    "price": 90,
+    "category": "caramel",
+    "description": "Fudgy brownie swirled with rich, buttery salted caramel and topped with sea salt.",
+    "image": "https://images.unsplash.com/photo-1604085465840-7e61bc8145f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 7,
+    "isBestSeller": false
+  },
+  {
+    "id": "p6",
+    "name": "Walnut Brownie",
+    "price": 95,
+    "category": "nutty",
+    "description": "Our classic brownie loaded with toasted walnuts for the perfect crunch.",
+    "image": "https://images.unsplash.com/photo-1515037893149-de7f840978e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    "popularity": 9,
+    "isBestSeller": false
+  }
+]
