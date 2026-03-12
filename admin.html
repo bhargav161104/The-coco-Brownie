@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | The Coco Brownie</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body style="background: #1A100C;">
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container" style="max-width: 100%;">
+            <a href="index.html" class="logo">
+                <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+                <span style="font-size: 1.2rem; color: var(--highlight-color); font-weight: bold; margin-left: -5px;">Admin</span>
+            </a>
+            <div class="nav-actions">
+                <a href="index.html" class="btn btn-outline"
+                    style="padding: 8px 15px; font-size: 0.9rem;">Storefront</a>
+                <button id="adminMobileToggle" class="mobile-menu-btn" style="display: block; margin-left:10px;">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LOGIN OVERLAY -->
+    <div class="animation-overlay active" id="adminLoginOverlay" style="background: var(--primary-color);">
+        <div class="admin-login glass-card">
+            <i class="ph ph-lock-key" style="font-size: 3rem; color: var(--highlight-color); margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 20px;">Admin Access</h2>
+            <form id="adminLoginForm">
+                <input type="password" class="form-control" placeholder="Enter PIN (try 1234)" required
+                    style="width: 100%; margin-bottom: 20px; text-align: center; letter-spacing: 5px; font-size: 1.2rem;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Unlock Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER DETAILS MODAL -->
+    <div class="modal-overlay" id="orderDetailsModal" style="z-index: 10000;">
+        <div class="modal-content glass-card" style="max-width: 600px; width: 90%; text-align: left;">
+            <button class="modal-close"
+                onclick="document.getElementById('orderDetailsModal').classList.remove('active')"><i
+                    class="ph ph-x"></i></button>
+            <h2 style="margin-bottom: 20px; color: var(--highlight-color);">Order Details</h2>
+            <div id="orderDetailsContent" style="color: #D7CCC8;">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYOUT -->
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar-menu">
+                <a href="#" class="active"><i class="ph ph-squares-four"></i> Dashboard</a>
+                <a href="#"><i class="ph ph-shopping-bag-open"></i> Orders</a>
+                <a href="#"><i class="ph ph-package"></i> Products</a>
+                <a href="#"><i class="ph ph-users"></i> Customers</a>
+                <a href="#"><i class="ph ph-chart-line-up"></i> Analytics</a>
+                <a href="#" style="margin-top: 50px; color: #EF5350;"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-main">
+
+            <div class="admin-header-row">
+                <h2>Dashboard Overview</h2>
+                <div style="color: #BCAAA4; font-size: 0.9rem;">Last updated: Today, 12:45 PM</div>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="ph ph-currency-inr"></i></div>
+                    <div class="stat-info">
+                        <h4>Total Revenue</h4>
+                        <div class="stat-val">₹45,200</div>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="ph ph-shopping-cart"></i></div>
+                    <div class="stat-info">
+                        <h4>Orders Today</h4>
+                        <div class="stat-val" id="todayOrdersCount">12</div>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="ph ph-users"></i></div>
+                    <div class="stat-info">
+                        <h4>New Customers</h4>
+                        <div class="stat-val">8</div>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="ph ph-package"></i></div>
+                    <div class="stat-info">
+                        <h4>Top Product</h4>
+                        <div class="stat-val" style="font-size: 1.1rem;">Nutella Lava</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHARTS & TABLES -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+
+                <!-- CHART -->
+                <div class="glass-card" style="padding: 30px;">
+                    <h3 style="margin-bottom: 20px;">Sales Last 7 Days</h3>
+                    <div class="chart-mock">
+                        <div class="chart-bar" style="height: 40%;"><span class="chart-label">Mon</span></div>
+                        <div class="chart-bar" style="height: 60%;"><span class="chart-label">Tue</span></div>
+                        <div class="chart-bar" style="height: 30%;"><span class="chart-label">Wed</span></div>
+                        <div class="chart-bar" style="height: 80%;"><span class="chart-label">Thu</span></div>
+                        <div class="chart-bar" style="height: 50%;"><span class="chart-label">Fri</span></div>
+                        <div class="chart-bar" style="height: 90%;"><span class="chart-label">Sat</span></div>
+                        <div class="chart-bar"
+                            style="height: 100%; background: linear-gradient(to top, var(--primary-color), #25D366);">
+                            <span class="chart-label">Sun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECENT ORDERS -->
+                <div class="glass-card" style="padding: 30px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Recent Orders</h3>
+                        <a href="#" style="color: var(--highlight-color); font-size: 0.9rem;">View All</a>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer (Phone)</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminOrdersTable">
+                                <!-- Data injected via JS -->
+                                <tr>
+                                    <td colspan="5" style="text-align:center;">Loading orders...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Login Logic
+            const loginOverlay = document.getElementById('adminLoginOverlay');
+            const loginForm = document.getElementById('adminLoginForm');
+
+            // Basic check
+            if (sessionStorage.getItem('coco_admin_auth')) {
+                loginOverlay.classList.remove('active');
+            }
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pin = loginForm.querySelector('input').value;
+                if (pin === '1234') {
+                    sessionStorage.setItem('coco_admin_auth', 'true');
+                    loginOverlay.classList.remove('active');
+                } else {
+                    alert('Invalid PIN!');
+                }
+            });
+
+            // 2. Fetch Orders from API
+            const loadOrders = async () => {
+                try {
+                    const response = await fetch('/api/orders');
+                    const orders = await response.json();
+
+                    const tableBody = document.getElementById('adminOrdersTable');
+                    tableBody.innerHTML = ''; // Create a clean slate
+
+                    if (orders.length > 0) {
+                        document.getElementById('todayOrdersCount').textContent = orders.length;
+
+                        // Append dynamic orders
+                        // Show all orders or maybe top 10 for dashboardhttp://localhost:5000/admin.html
+                        orders.reverse().slice(0, 10).forEach(order => {
+                            const tr = document.createElement('tr');
+                            const badgeClass = order.status === 'Delivered' ? 'status-del' : 'status-prep';
+                            // Format fallback (handles different possible structures)
+                            const price = order.total || (order.amount ? order.amount / 100 : 0);
+                            const customerNameOrPhone = order.phone || order.customerName || 'Customer';
+
+                            // Let's create a safe base64 encoded string of the order object so we don't break string quoting in HTML
+                            const orderJSON = encodeURIComponent(JSON.stringify(order));
+
+                            tr.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${customerNameOrPhone}</td>
+                    <td>₹${price}</td>
+                    <td><span class="status-badge ${badgeClass}">${order.status || 'Preparing'}</span></td>
+                    <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;" onclick='viewOrderDetails("${orderJSON}")'>View</button></td>
+                  `;
+                            tableBody.appendChild(tr);
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No orders found</td></tr>';
+                    }
+                } catch (err) {
+                    console.error("Failed to load orders in admin:", err);
+                }
+            };
+            loadOrders();
+
+            // 3. View Order Details function
+            window.viewOrderDetails = (orderJsonStr) => {
+                const order = JSON.parse(decodeURIComponent(orderJsonStr));
+                const modal = document.getElementById('orderDetailsModal');
+                const content = document.getElementById('orderDetailsContent');
+
+                let itemsList = '';
+                if (order.items && order.items.length > 0) {
+                    itemsList = '<ul style="padding-left: 20px; line-height: 1.8;">' + order.items.map(i => `<li>${i.quantity}x ${i.name} (₹${i.price * i.quantity})</li>`).join('') + '</ul>';
+                } else {
+                    itemsList = '<p>No items found or custom payment</p>';
+                }
+
+                content.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <strong>Order ID:</strong> <br><span style="color: #fff;">${order.id}</span>
+                        </div>
+                        <div>
+                            <strong>Date:</strong> <br><span style="color: #fff;">${order.date || order.createdAt || 'N/A'}</span>
+                        </div>
+                        <div>
+                            <strong>Name:</strong> <br><span style="color: #fff;">${order.customerName || 'N/A'}</span>
+                        </div>
+                        <div>
+                            <strong>Phone:</strong> <br><span style="color: #fff;">${order.phone || 'N/A'}</span>
+                        </div>
+                        <div>
+                            <strong>Email:</strong> <br><span style="color: #fff;">${order.email || 'N/A'}</span>
+                        </div>
+                        <div>
+                            <strong>Method:</strong> <br><span style="color: #fff;">${(order.method || 'online').toUpperCase()}</span>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <strong>Delivery Address:</strong> <br><span style="color: #fff;">${order.address || 'N/A'} - ${order.pincode || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <hr style="border-color: var(--glass-border); margin: 15px 0;">
+                    <h3 style="margin-bottom: 10px; color: #fff; font-size: 1.1rem;">Items Ordered</h3>
+                    ${itemsList}
+                    <div style="text-align: right; font-size: 1.4rem; font-weight: bold; margin-top: 15px; color: var(--highlight-color);">
+                        Total: ₹${order.total || (order.amount ? order.amount / 100 : 0)}
+                    </div>
+                `;
+                modal.classList.add('active');
+            };
+
+            // 3. Mobile Sidebar
+            const sidebar = document.getElementById('adminSidebar');
+            const toggleBtn = document.getElementById('adminMobileToggle');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+
+</html>

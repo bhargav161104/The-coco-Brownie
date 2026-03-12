@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Coco Brownie | Premium Desserts</title>
+  
+  <!-- Fonts & Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="tracking.html">Track Order</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-icon">
+          <i class="ph ph-shopping-bag"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <div class="mobile-menu-btn">
+          <i class="ph ph-list"></i>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HOT CHOCOLATE ANIMATION OVERLAY -->
+  <div class="animation-overlay" id="brownieAnimation">
+    <div class="brownie-container">
+      <div class="brownie-half brownie-left"></div>
+      <div class="brownie-half brownie-right"></div>
+      <div class="molten-chocolate"></div>
+    </div>
+    <div class="anim-text">Preparing your craving...</div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-blob"></div>
+    <!-- Floating chocolates -->
+    <div class="floating-choc f1"><i class="ph-fill ph-cookie"></i></div>
+    <div class="floating-choc f2"><i class="ph-fill ph-cookie"></i></div>
+    <div class="floating-choc f3"><i class="ph-fill ph-star"></i></div>
+
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Freshly Baked Happiness in Every Bite</h1>
+        <p class="hero-subtitle">Handcrafted premium brownies made with rich cocoa and love. A luxury experience for your taste buds.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="orderNowBtn">
+            <i class="ph ph-shopping-cart"></i> Order Now
+          </button>
+          <a href="menu.html" class="btn btn-outline">View Menu</a>
+        </div>
+      </div>
+      <div class="hero-image-container">
+        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Premium Brownie with melted chocolate" class="hero-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- BEST SELLERS SECTION -->
+  <section class="section container">
+    <h2 class="section-title">Best Sellers</h2>
+    <div class="product-grid" id="bestSellersGrid">
+      <!-- Injected via JS -->
+    </div>
+  </section>
+
+  <!-- FEATURES / ABOUT -->
+  <section class="section glass-card" style="margin: 50px 20px; padding: 60px 20px; text-align: center;">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 40px;">
+      <div style="max-width: 250px;">
+        <i class="ph ph-leaf" style="font-size: 3rem; color: var(--highlight-color); margin-bottom: 15px;"></i>
+        <h3 style="margin-bottom: 10px;">Premium Ingredients</h3>
+        <p style="color: #D7CCC8; font-size: 0.9rem;">We source the finest 70% dark couverture chocolate.</p>
+      </div>
+      <div style="max-width: 250px;">
+        <i class="ph ph-oven" style="font-size: 3rem; color: var(--highlight-color); margin-bottom: 15px;"></i>
+        <h3 style="margin-bottom: 10px;">Freshly Baked</h3>
+        <p style="color: #D7CCC8; font-size: 0.9rem;">Baked daily in small batches to ensure perfect fudginess.</p>
+      </div>
+      <div style="max-width: 250px;">
+        <i class="ph ph-moped" style="font-size: 3rem; color: var(--highlight-color); margin-bottom: 15px;"></i>
+        <h3 style="margin-bottom: 10px;">Fast Delivery</h3>
+        <p style="color: #D7CCC8; font-size: 0.9rem;">Delivered warm and fresh right to your doorstep.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOATING BUTTONS -->
+  <div class="floating-widgets">
+    <a href="menu.html" class="float-btn order-btn-float">
+      <i class="ph ph-bag"></i>
+      <span class="tooltip">Order Now</span>
+    </a>
+    <a href="https://wa.me/919666669138" target="_blank" class="float-btn wa-btn">
+      <i class="ph ph-whatsapp-logo"></i>
+      <span class="tooltip">Chat with us</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h3>The Coco Brownie</h3>
+        <p>Premium desserts handcrafted to perfection. Elevate your cravings with our luxurious brownies.</p>
+        <div class="social-icons">
+          <a href="#"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#"><i class="ph ph-twitter-logo"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="ph ph-phone"></i> +91 96666 69138</li>
+          <li><i class="ph ph-envelope-simple"></i> hello@thecocobrownie.com</li>
+          <li><i class="ph ph-map-pin"></i> Vijayawada, Andhra Pradesh</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tracking.html">Track Order</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      &copy; 2026 The Coco Brownie. All rights reserved. Designed with ❤️.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.productData.fetchProducts();
+      // 1. Render Best Sellers
+      const bestSellersContainer = document.getElementById('bestSellersGrid');
+      const bestSellers = window.productData.products.filter(p => p.isBestSeller).slice(0, 3);
+      
+      bestSellers.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card glass-card';
+        card.innerHTML = `
+          <div class="product-img-wrap">
+            <img src="${product.image}" alt="${product.name}" class="product-img">
+            <button class="quick-view-btn" onclick="window.location.href='menu.html?quickview=${product.id}'">Quick View</button>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">${product.name}</h3>
+            <div class="product-price">${window.productData.formatPrice(product.price)}</div>
+            <button class="btn btn-outline product-add-btn" onclick='window.addToCartWrapper(${JSON.stringify(product)})'>
+              <i class="ph ph-shopping-cart"></i> Add to Cart
+            </button>
+          </div>
+        `;
+        bestSellersContainer.appendChild(card);
+      });
+
+      // Wrapper to handle DOM onclick and pass to global helpers
+      window.addToCartWrapper = (product) => {
+        window.cartHelpers.addToCart(product);
+      };
+
+      // 2. Hot Chocolate Animation Logic
+      const orderNowBtn = document.getElementById('orderNowBtn');
+      const animationOverlay = document.getElementById('brownieAnimation');
+
+      orderNowBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Show animation
+        animationOverlay.classList.add('active');
+        
+        // Wait for animation to finish (roughly 3s), then redirect to Menu
+        setTimeout(() => {
+          window.location.href = 'menu.html';
+        }, 3000);
+      });
+    });
+  </script>
+</body>
+</html>

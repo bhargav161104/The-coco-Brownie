@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order | The Coco Brownie</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css"> <!-- Reusing some admin/tracking styles -->
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+        <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+      </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="tracking.html" class="active">Track Order</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-icon">
+                    <i class="ph ph-shopping-bag"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+                <div class="mobile-menu-btn">
+                    <i class="ph ph-list"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="tracking-header">
+        <div class="container">
+            <h1>Track Your Order</h1>
+            <p>Enter the phone number used during checkout to track your brownie's journey.</p>
+        </div>
+    </header>
+
+    <section class="section container">
+
+        <!-- SEARCH FORM -->
+        <div class="tracking-form-container glass-card" id="trackingForm">
+            <i class="ph ph-map-pin-line"></i>
+            <h2 style="margin-bottom: 20px;">Find My Order</h2>
+            <form id="searchForm">
+                <input type="tel" class="form-control" id="phoneSearch"
+                    placeholder="Enter Phone Number (e.g. 9876543210)" required
+                    style="margin-bottom: 20px; text-align: center; font-size: 1.1rem; padding: 15px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Track Now</button>
+            </form>
+            <div id="errorMsg" style="color: #EF5350; margin-top: 15px; display: none;">No active orders found for this
+                number.</div>
+        </div>
+
+        <!-- RESULT TIMELINE -->
+        <div class="tracking-result glass-card" id="trackingResult">
+            <div class="order-info-header">
+                <div>
+                    <h3 id="resOrderId">#ORD-XXXXXX</h3>
+                    <p style="color: #BCAAA4; font-size: 0.9rem;" id="resDate">Sep 25, 2026</p>
+                </div>
+                <div style="text-align: right;">
+                    <h3 id="resTotal">₹0</h3>
+                    <p style="color: var(--highlight-color); font-weight: bold;" id="resStatus">Preparing</p>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-step completed">
+                    <div class="timeline-icon"><i class="ph ph-check"></i></div>
+                    <div class="timeline-content">
+                        <h4>Order Placed</h4>
+                        <p>We have received your order.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step active" id="stepPrep">
+                    <div class="timeline-icon"><i class="ph ph-oven"></i></div>
+                    <div class="timeline-content">
+                        <h4>Preparing</h4>
+                        <p>Your brownies are currently in the oven.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step" id="stepOut">
+                    <div class="timeline-icon"><i class="ph ph-moped"></i></div>
+                    <div class="timeline-content">
+                        <h4>Out for Delivery</h4>
+                        <p>Rider is on the way to your location.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step" id="stepDel">
+                    <div class="timeline-icon"><i class="ph ph-house"></i></div>
+                    <div class="timeline-content">
+                        <h4>Delivered</h4>
+                        <p>Enjoy your freshly baked happiness!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-outline" onclick="location.reload()">Track Another</button>
+            </div>
+        </div>
+
+    </section>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('searchForm');
+            const phoneInput = document.getElementById('phoneSearch');
+            const errorMsg = document.getElementById('errorMsg');
+
+            const formContainer = document.getElementById('trackingForm');
+            const resultContainer = document.getElementById('trackingResult');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const phone = phoneInput.value.trim();
+                let userOrder = null;
+                
+                try {
+                    const response = await fetch(`/api/orders/${phone}`);
+                    const orders = await response.json();
+                    if (orders.length > 0) {
+                        // Find most recent order for this phone
+                        userOrder = orders[orders.length - 1];
+                    }
+                } catch (err) {
+                    console.error("Error fetching order from backend", err);
+                }
+
+                if (userOrder) {
+                    // Success
+                    errorMsg.style.display = 'none';
+                    formContainer.style.display = 'none';
+                    resultContainer.style.display = 'block';
+
+                    document.getElementById('resOrderId').textContent = userOrder.id;
+                    document.getElementById('resDate').textContent = userOrder.date;
+                    document.getElementById('resTotal').textContent = window.productData.formatPrice(userOrder.total);
+                    document.getElementById('resStatus').textContent = userOrder.status;
+
+                    // For demo purposes, we randomly assign a status to the timeline
+                    const statuses = ['Preparing', 'Out for Delivery', 'Delivered'];
+                    const randomStatusIndex = Math.floor(Math.random() * statuses.length);
+
+                    const stepPrep = document.getElementById('stepPrep');
+                    const stepOut = document.getElementById('stepOut');
+                    const stepDel = document.getElementById('stepDel');
+
+                    if (randomStatusIndex >= 1) {
+                        stepPrep.classList.replace('active', 'completed');
+                        stepPrep.querySelector('i').className = 'ph ph-check';
+                        stepOut.classList.add('active');
+                    }
+                    if (randomStatusIndex === 2) {
+                        stepOut.classList.replace('active', 'completed');
+                        stepOut.querySelector('i').className = 'ph ph-check';
+                        stepDel.classList.add('completed');
+                        stepDel.querySelector('i').className = 'ph ph-check';
+                        document.getElementById('resStatus').textContent = 'Delivered';
+                    }
+
+                } else {
+                    // Fail
+                    errorMsg.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | The Coco Brownie</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="tracking.html">Track Order</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-icon active">
+                    <i class="ph ph-shopping-bag"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+                <div class="mobile-menu-btn">
+                    <i class="ph ph-list"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="cart-header">
+        <div class="container">
+            <h1>Your Brownie Bag</h1>
+        </div>
+    </header>
+
+    <!-- CART CONTENT -->
+    <section class="section container" style="padding-top: 20px;">
+
+        <div id="emptyCartState" class="cart-empty" style="display: none;">
+            <i class="ph ph-shopping-cart-simple"></i>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any delicious brownies yet.</p>
+            <a href="menu.html" class="btn btn-primary">Explore Menu</a>
+        </div>
+
+        <div id="fullCartState" class="cart-container">
+
+            <!-- ITEMS LIST -->
+            <div class="cart-items-section" id="cartItemsList">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="order-summary glass-card">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotalVal">₹0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span id="shippingVal">₹50</span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxes (5%)</span>
+                    <span id="taxVal">₹0</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="totalVal">₹0</span>
+                </div>
+
+                <button class="btn btn-primary checkout-btn" onclick="window.location.href='checkout.html'">
+                    Proceed to Checkout <i class="ph ph-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-bottom" style="border-top: none;">
+            &copy; 2026 The Coco Brownie. All rights reserved. Designed with ❤️.
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartItemsList = document.getElementById('cartItemsList');
+            const emptyState = document.getElementById('emptyCartState');
+            const fullState = document.getElementById('fullCartState');
+
+            const subtotalEl = document.getElementById('subtotalVal');
+            const taxEl = document.getElementById('taxVal');
+            const totalEl = document.getElementById('totalVal');
+
+            const renderCart = () => {
+                const cart = window.cartHelpers.getCart();
+
+                if (cart.length === 0) {
+                    emptyState.style.display = 'block';
+                    fullState.style.display = 'none';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                fullState.style.display = 'flex';
+                cartItemsList.innerHTML = '';
+
+                let subtotal = 0;
+
+                cart.forEach((item, index) => {
+                    subtotal += (item.price * item.quantity);
+
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item glass-card';
+                    cartItem.style.animation = `slideUp 0.4s ease forwards ${index * 0.1}s`;
+                    cartItem.style.opacity = '0';
+
+                    cartItem.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+            <div class="cart-item-details">
+              <h3 class="cart-item-title">${item.name}</h3>
+              <div class="cart-item-price">${window.productData.formatPrice(item.price)} each</div>
+              
+              <div class="cart-item-actions">
+                <div class="cart-qty-controls">
+                  <button class="cart-qty-btn" onclick="updateQty('${item.id}', -1)"><i class="ph ph-minus"></i></button>
+                  <span class="cart-qty-val">${item.quantity}</span>
+                  <button class="cart-qty-btn" onclick="updateQty('${item.id}', 1)"><i class="ph ph-plus"></i></button>
+                </div>
+                <button class="cart-remove-btn" onclick="removeItem('${item.id}')" title="Remove Item">
+                  <i class="ph ph-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--highlight-color); margin-left: auto;">
+              ${window.productData.formatPrice(item.price * item.quantity)}
+            </div>
+          `;
+                    cartItemsList.appendChild(cartItem);
+                });
+
+                // Calculate Totals
+                const shipping = 50;
+                const tax = Math.round(subtotal * 0.05);
+                const total = subtotal + shipping + tax;
+
+                subtotalEl.textContent = window.productData.formatPrice(subtotal);
+                taxEl.textContent = window.productData.formatPrice(tax);
+                totalEl.textContent = window.productData.formatPrice(total);
+
+                // Save subtotal data to session for checkout page
+                sessionStorage.setItem('coco_checkout_total', total);
+            };
+
+            window.updateQty = (id, change) => {
+                let cart = window.cartHelpers.getCart();
+                const item = cart.find(i => i.id === id);
+                if (item) {
+                    item.quantity += change;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(i => i.id !== id);
+                    }
+                    window.cartHelpers.saveCart(cart);
+                    renderCart();
+                }
+            };
+
+            window.removeItem = (id) => {
+                let cart = window.cartHelpers.getCart();
+                cart = cart.filter(i => i.id !== id);
+                window.cartHelpers.saveCart(cart);
+                renderCart();
+            };
+
+            renderCart();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | The Coco Brownie</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Load Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <style>
+        /* Specific overrides for checkout */
+        .order-summary {
+            top: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .summary-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .summary-item-info {
+            flex: 1;
+        }
+
+        .summary-item-name {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .summary-item-qty {
+            font-size: 0.8rem;
+            color: #BCAAA4;
+        }
+    </style>
+</head>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="tracking.html">Track Order</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MODAL FOR SUCCESS -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content glass-card success-modal" style="max-width: 500px;">
+            <div class="success-icon"><i class="ph ph-check"></i></div>
+            <h2>Order Confirmed!</h2>
+            <p>Thank you for choosing The Coco Brownie. Your sweet treats are being prepared and will be dispatched
+                shortly.</p>
+            <p style="font-size: 0.9rem; color: var(--highlight-color); margin-bottom: 20px;">
+                Order ID: <strong id="displayOrderId">#000000</strong>
+            </p>
+            <button class="btn btn-primary" onclick="window.location.href='tracking.html'">Track Order</button>
+        </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="modal-overlay" id="loadingOverlay" style="z-index: 9999;">
+        <div
+            style="color: var(--highlight-color); font-size: 2rem; display: flex; flex-direction: column; align-items: center;">
+            <i class="ph ph-spinner-gap"
+                style="animation: spin 1s linear infinite; font-size: 4rem; margin-bottom: 20px;"></i>
+            <p>Processing Payment...</p>
+        </div>
+    </div>
+    <style>
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <section class="section container" style="padding-top: 40px;">
+        <a href="cart.html"
+            style="color: var(--highlight-color); display: inline-flex; align-items: center; gap: 5px; margin-bottom: 20px;">
+            <i class="ph ph-arrow-left"></i> Back to Cart
+        </a>
+
+        <div class="checkout-container">
+
+            <!-- FORM -->
+            <div class="checkout-form-section glass-card">
+                <h2>Delivery Details</h2>
+                <form id="checkoutForm">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="fname" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="lname" class="form-control" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Email Address</label>
+                            <input type="email" id="emailInput" class="form-control" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Phone Number (for tracking)</label>
+                            <input type="tel" class="form-control" id="phoneInput" required
+                                placeholder="e.g. 9876543210">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Delivery Address</label>
+                            <textarea class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="form-control" value="Vijayawada" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Pincode</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 40px 0 20px;">Payment Method</h3>
+                    <div class="payment-methods" id="paymentMethods">
+                        <div class="payment-method selected" data-method="razorpay">
+                            <i class="ph ph-qr-code"></i>
+                            Pay Online (UPI/Card)
+                        </div>
+                        <div class="payment-method" data-method="cod">
+                            <i class="ph ph-money"></i>
+                            Cash on Delivery
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; margin-top: 40px; font-size: 1.2rem; padding: 15px;">
+                        Place Order • <span id="btnTotal">₹0</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- MINI SUMMARY -->
+            <div class="order-summary glass-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Order Summary</h3>
+                <div id="checkoutSummaryList" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
+                    <!-- Injected via JS -->
+                </div>
+
+                <div class="summary-total"
+                    style="border-top: 1px solid var(--glass-border); padding-top: 15px; margin-top: 0;">
+                    <span>Total to Pay</span>
+                    <span id="finalTotal">₹0</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = window.cartHelpers.getCart();
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            // Render Summary
+            const summaryList = document.getElementById('checkoutSummaryList');
+            cart.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'summary-item';
+                div.innerHTML = `
+          <img src="${item.image}" alt="">
+          <div class="summary-item-info">
+            <div class="summary-item-name">${item.name}</div>
+            <div class="summary-item-qty">Qty: ${item.quantity}</div>
+          </div>
+          <div style="font-weight: 600; color: var(--highlight-color);">${window.productData.formatPrice(item.price * item.quantity)}</div>
+        `;
+                summaryList.appendChild(div);
+            });
+
+            // Total — compute from cart directly so it's always accurate
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const shipping = 50;
+            const tax = Math.round(subtotal * 0.05);
+            const total = parseInt(sessionStorage.getItem('coco_checkout_total')) || (subtotal + shipping + tax);
+            document.getElementById('finalTotal').textContent = window.productData.formatPrice(total);
+            document.getElementById('btnTotal').textContent = window.productData.formatPrice(total);
+
+            // Payment Selection logic
+            let selectedMethod = 'razorpay';
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    method.classList.add('selected');
+                    selectedMethod = method.getAttribute('data-method');
+                });
+            });
+
+            // Form Submit -> Mock Payment -> Success
+            const checkoutForm = document.getElementById('checkoutForm');
+            const successModal = document.getElementById('successModal');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const displayOrderId = document.getElementById('displayOrderId');
+            const phoneInput = document.getElementById('phoneInput');
+
+            const finalizeOrder = async (orderIdParam) => {
+                // 1. Generate Fake Order ID if COD
+                const orderId = orderIdParam || ('ORD-' + Math.floor(100000 + Math.random() * 900000));
+
+                // 2. Setup New Order payload
+                const newOrder = {
+                    id: orderId,
+                    date: new Date().toLocaleDateString(),
+                    total: total,
+                    status: 'Preparing',
+                    customerName: document.getElementById('fname').value + ' ' + document.getElementById('lname').value,
+                    email: document.getElementById('emailInput').value,
+                    phone: phoneInput.value,
+                    address: document.querySelector('textarea.form-control').value,
+                    pincode: document.querySelectorAll('.form-control')[5].value,
+                    items: cart,
+                    method: selectedMethod
+                };
+
+                // 3. Send order data to the backend to save in JSON
+                try {
+                    await fetch('/api/save-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newOrder)
+                    });
+                } catch (err) {
+                    console.error("Error saving order to backend:", err);
+                }
+
+                // 4. Clear Cart
+                window.cartHelpers.saveCart([]);
+
+                // 5. Show Success Animation
+                displayOrderId.textContent = orderId;
+                loadingOverlay.classList.remove('active');
+                successModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (selectedMethod === 'cod') {
+                    // Skip Razorpay, confirm immediately
+                    finalizeOrder();
+                } else {
+                    // --- RAZORPAY INTEGRATION ---
+                    loadingOverlay.classList.add('active');
+
+                    try {
+                        // STEP 1: Call Backend to create order
+                        const response = await fetch('/api/create-order', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ amount: total })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error("Network response failed or Backend not running");
+                        }
+
+                        const data = await response.json();
+
+                        // STEP 2: Configure Razorpay UI
+                        const options = {
+                            key: "rzp_test_YourMockKeyIdHere", // Note: Replace with your Razorpay Key ID
+                            amount: data.amount,
+                            currency: data.currency,
+                            name: "The Coco Brownie",
+                            description: "Premium Brownie Order",
+                            image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&w=200&q=80",
+                            order_id: data.orderId,
+                            handler: async function (response) {
+                                // STEP 3: Verify Payment Signature on Backend
+                                try {
+                                    const verifyRes = await fetch('/api/verify-payment', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            razorpay_order_id: response.razorpay_order_id,
+                                            razorpay_payment_id: response.razorpay_payment_id,
+                                            razorpay_signature: response.razorpay_signature
+                                        })
+                                    });
+
+                                    const verifyData = await verifyRes.json();
+                                    if (verifyData.success) {
+                                        finalizeOrder('RZP-' + response.razorpay_order_id.slice(-6).toUpperCase());
+                                    } else {
+                                        alert("Payment verification failed! Please contact support.");
+                                        loadingOverlay.classList.remove('active');
+                                    }
+                                } catch (err) {
+                                    console.error(err);
+                                    alert("Error verifying payment.");
+                                    loadingOverlay.classList.remove('active');
+                                }
+                            },
+                            prefill: {
+                                name: document.getElementById('fname').value + ' ' + document.getElementById('lname').value,
+                                email: document.getElementById('emailInput').value,
+                                contact: phoneInput.value
+                            },
+                            theme: {
+                                color: "#C69C6D"
+                            }
+                        };
+
+                        const rzp = new Razorpay(options);
+
+                        rzp.on('payment.failed', function (response) {
+                            alert("Payment Failed: " + response.error.description);
+                            loadingOverlay.classList.remove('active');
+                        });
+
+                        rzp.open();
+
+                    } catch (error) {
+                        console.error("Backend Error:", error);
+                        alert("Could not connect to the payment server. \n\nFalling back to COD order confirmation for demonstration.");
+                        // For demo flow continuity if backend isn't up
+                        setTimeout(() => { finalizeOrder(); }, 1000);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

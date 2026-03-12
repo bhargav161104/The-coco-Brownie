@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | The Coco Brownie</title>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/menu.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled"> <!-- Always scrolled on subpages for bg -->
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.jpg" alt="The Coco Brownie" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="tracking.html">Track Order</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-icon">
+                    <i class="ph ph-shopping-bag"></i>
+                    <span class="cart-badge">0</span>
+                </a>
+                <div class="mobile-menu-btn">
+                    <i class="ph ph-list"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MENU HEADER -->
+    <header class="menu-header">
+        <div class="container">
+            <h1>Our Signature Menu</h1>
+            <p>Explore our wide selection of handcrafted, freshly baked premium brownies. Perfect for gifting or
+                treating yourself.</p>
+        </div>
+    </header>
+
+    <!-- MENU CONTROLS & GRID -->
+    <section class="section container" style="padding-top: 40px;">
+
+        <div class="menu-controls">
+            <div class="search-bar">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search brownies...">
+            </div>
+
+            <div class="filter-sort">
+                <select class="custom-select" id="priceFilter">
+                    <option value="all">All Prices</option>
+                    <option value="under80">Under ₹80</option>
+                    <option value="above80">₹80 & Above</option>
+                </select>
+
+                <select class="custom-select" id="sortSelect">
+                    <option value="popular">Sort by Popularity</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="product-grid" id="menuGrid">
+            <!-- Injected via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="noResults" style="display: none; text-align: center; padding: 50px 0; color: #BCAAA4;">
+            <i class="ph ph-smiley-sad" style="font-size: 3rem; margin-bottom: 10px;"></i>
+            <h3>No brownies found</h3>
+            <p>Try adjusting your search or filters.</p>
+        </div>
+    </section>
+
+    <!-- QUICK VIEW MODAL -->
+    <div class="modal-overlay" id="quickViewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal"><i class="ph ph-x"></i></button>
+
+            <div class="modal-img-container">
+                <img src="" alt="Product Image" class="modal-img" id="modalImg">
+            </div>
+
+            <div class="modal-details">
+                <div class="modal-category" id="modalCat">Category</div>
+                <h2 class="modal-title" id="modalTitle">Product Name</h2>
+                <div class="modal-price" id="modalPrice">₹0</div>
+                <p class="modal-desc" id="modalDesc">Description goes here.</p>
+
+                <div class="qty-selector">
+                    <button class="qty-btn" id="qtyMinus"><i class="ph ph-minus"></i></button>
+                    <input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="20" readonly>
+                    <button class="qty-btn" id="qtyPlus"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="modalAddCart">
+                        <i class="ph ph-shopping-cart"></i> Add to Cart
+                    </button>
+                    <button class="btn btn-outline" id="modalBuyNow">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>The Coco Brownie</h3>
+                <p>Premium desserts handcrafted to perfection. Elevate your cravings with our luxurious brownies.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                    <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                    <a href="#"><i class="ph ph-twitter-logo"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="ph ph-phone"></i> +91 96666 69138</li>
+                    <li><i class="ph ph-envelope-simple"></i> hello@thecocobrownie.com</li>
+                    <li><i class="ph ph-map-pin"></i> Vijayawada, Andhra Pradesh</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            &copy; 2026 The Coco Brownie. All rights reserved. Designed with ❤️.
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.productData.fetchProducts();
+      const menuGrid = document.getElementById('menuGrid');
+      const searchInput = document.getElementById('searchInput');
+      const priceFilter = document.getElementById('priceFilter');
+            const sortSelect = document.getElementById('sortSelect');
+            const noResults = document.getElementById('noResults');
+
+            let currentProducts = [...window.productData.products];
+
+            // --- RENDER GRID ---
+            const renderGrid = (products) => {
+                menuGrid.innerHTML = '';
+                if (products.length === 0) {
+                    menuGrid.style.display = 'none';
+                    noResults.style.display = 'block';
+                    return;
+                }
+
+                menuGrid.style.display = 'grid';
+                noResults.style.display = 'none';
+
+                products.forEach((product, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card glass-card';
+                    // Stagger animation delay
+                    card.style.animation = `slideUp 0.5s ease forwards ${index * 0.1}s`;
+                    card.style.opacity = '0';
+
+                    card.innerHTML = `
+            <div class="product-img-wrap">
+              <img src="${product.image}" loading="lazy" alt="${product.name}" class="product-img">
+              <button class="quick-view-btn" onclick="openQuickView('${product.id}')">Quick View</button>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">${product.name}</h3>
+              <div class="product-price">${window.productData.formatPrice(product.price)}</div>
+              <button class="btn btn-outline product-add-btn" onclick='window.cartHelpers.addToCart(${JSON.stringify(product)})'>
+                <i class="ph ph-shopping-cart"></i> Add to Cart
+              </button>
+            </div>
+          `;
+                    menuGrid.appendChild(card);
+                });
+            };
+
+            // --- FILTERING & SORTING LOGIC ---
+            const applyFilters = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const priceVal = priceFilter.value;
+                const sortVal = sortSelect.value;
+
+                // 1. Search filter
+                let filtered = window.productData.products.filter(p =>
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    p.description.toLowerCase().includes(searchTerm)
+                );
+
+                // 2. Price filter
+                if (priceVal === 'under80') {
+                    filtered = filtered.filter(p => p.price < 80);
+                } else if (priceVal === 'above80') {
+                    filtered = filtered.filter(p => p.price >= 80);
+                }
+
+                // 3. Sorting
+                if (sortVal === 'price-low') {
+                    filtered.sort((a, b) => a.price - b.price);
+                } else if (sortVal === 'price-high') {
+                    filtered.sort((a, b) => b.price - a.price);
+                } else if (sortVal === 'popular') {
+                    filtered.sort((a, b) => b.popularity - a.popularity);
+                }
+
+                currentProducts = filtered;
+                renderGrid(currentProducts);
+            };
+
+            // Event Listeners for Filters
+            searchInput.addEventListener('input', applyFilters);
+            priceFilter.addEventListener('change', applyFilters);
+            sortSelect.addEventListener('change', applyFilters);
+
+            // --- QUICK VIEW MODAL LOGIC ---
+            const modal = document.getElementById('quickViewModal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            const mImg = document.getElementById('modalImg');
+            const mCat = document.getElementById('modalCat');
+            const mTitle = document.getElementById('modalTitle');
+            const mPrice = document.getElementById('modalPrice');
+            const mDesc = document.getElementById('modalDesc');
+            const qtyInput = document.getElementById('qtyInput');
+
+            let activeProduct = null;
+            let qty = 1;
+
+            window.openQuickView = (productId) => {
+                activeProduct = window.productData.products.find(p => p.id === productId);
+                if (!activeProduct) return;
+
+                // Populate Data
+                mImg.src = activeProduct.image;
+                mCat.textContent = activeProduct.category;
+                mTitle.textContent = activeProduct.name;
+                mPrice.textContent = window.productData.formatPrice(activeProduct.price);
+                mDesc.textContent = activeProduct.description;
+
+                // Reset Qty
+                qty = 1;
+                qtyInput.value = qty;
+
+                // Open Modal
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Stop background scrolling
+            };
+
+            const closeQuickView = () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            };
+
+            closeModalBtn.addEventListener('click', closeQuickView);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeQuickView();
+            });
+
+            // Qty Controls
+            document.getElementById('qtyMinus').addEventListener('click', () => {
+                if (qty > 1) { qty--; qtyInput.value = qty; }
+            });
+            document.getElementById('qtyPlus').addEventListener('click', () => {
+                if (qty < 20) { qty++; qtyInput.value = qty; }
+            });
+
+            // Actions
+            document.getElementById('modalAddCart').addEventListener('click', () => {
+                window.cartHelpers.addToCart(activeProduct, qty);
+                closeQuickView();
+            });
+            document.getElementById('modalBuyNow').addEventListener('click', () => {
+                window.cartHelpers.addToCart(activeProduct, qty);
+                window.location.href = 'cart.html';
+            });
+
+            // Check URL for quickview param (from Best Sellers)
+            const urlParams = new URLSearchParams(window.location.search);
+            const qvId = urlParams.get('quickview');
+
+            // Initial Render
+            // Initializing sort logic correctly
+            applyFilters();
+
+            if (qvId) {
+                // slight delay to let DOM render First
+                setTimeout(() => openQuickView(qvId), 300);
+            }
+        });
+    </script>
+</body>
+
+</html>
