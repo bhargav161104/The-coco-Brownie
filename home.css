@@ -1,0 +1,353 @@
+/* --- HERO SECTION --- */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: 80px;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-gradient);
+    z-index: -2;
+}
+
+.hero-blob {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(93, 64, 55, 0.8) 0%, rgba(62, 39, 35, 0) 70%);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+    z-index: -1;
+    animation: float 10s ease-in-out infinite alternate;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 40px;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 600px;
+    animation: slideUp 1s ease forwards;
+}
+
+.hero-title {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, var(--accent-color), var(--highlight-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #D7CCC8;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.hero-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    animation: fadeIn 1.5s ease forwards;
+}
+
+.hero-img {
+    width: 100%;
+    max-width: 500px;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+    animation: float-slow 6s ease-in-out infinite;
+    border-radius: 20px;
+}
+
+/* Floating Elements */
+.floating-choc {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.6;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    z-index: 0;
+    color: var(--secondary-color);
+}
+
+.f1 {
+    top: 20%;
+    left: 10%;
+    animation: float 4s ease-in-out infinite;
+    font-size: 50px;
+}
+
+.f2 {
+    bottom: 20%;
+    right: 10%;
+    animation: float 5s ease-in-out infinite reverse;
+    color: var(--primary-color);
+    font-size: 80px;
+}
+
+.f3 {
+    top: 30%;
+    right: 40%;
+    animation: float 6s ease-in-out infinite 1s;
+    color: var(--highlight-color);
+    font-size: 40px;
+}
+
+/* HOT CHOCOLATE ANIMATION */
+.animation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(35, 22, 19, 0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.animation-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.brownie-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    perspective: 1000px;
+}
+
+.brownie-half {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80');
+    background-size: 200% 100%;
+    border-radius: 20px;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.brownie-left {
+    left: 0;
+    background-position: left center;
+    border-right: 2px solid #2D1B15;
+    transform-origin: left center;
+}
+
+.brownie-right {
+    right: 0;
+    background-position: right center;
+    border-left: 2px solid #2D1B15;
+    transform-origin: right center;
+}
+
+.molten-chocolate {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: #2D1B15;
+    border-radius: 50%;
+    box-shadow: 0 0 30px #4E342E, 0 0 60px #3E2723;
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+/* Active Animation States */
+.animation-overlay.active .brownie-left {
+    transform: translateX(-100px) rotateY(-30deg);
+}
+
+.animation-overlay.active .brownie-right {
+    transform: translateX(100px) rotateY(30deg);
+}
+
+.animation-overlay.active .molten-chocolate {
+    width: 200px;
+    height: 200px;
+    opacity: 1;
+    background: radial-gradient(circle, #4E342E 0%, #2D1B15 80%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    animation: morph 3s ease-in-out infinite;
+}
+
+.anim-text {
+    position: absolute;
+    bottom: 20%;
+    color: var(--highlight-color);
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease 1s;
+}
+
+.animation-overlay.active .anim-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- BEST SELLERS --- */
+
+
+/* --- FLOATING ORDER BUTTON & WHATSAPP --- */
+.floating-widgets {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 999;
+}
+
+.float-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    position: relative;
+}
+
+.wa-btn {
+    background: #25D366;
+}
+
+.wa-btn:hover {
+    background: #128C7E;
+    transform: scale(1.1);
+}
+
+.order-btn-float {
+    background: var(--highlight-color);
+    color: var(--text-dark);
+}
+
+.order-btn-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--highlight-color);
+}
+
+.tooltip {
+    position: absolute;
+    right: 80px;
+    background: var(--primary-color);
+    color: var(--accent-color);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    border: 1px solid var(--highlight-color);
+}
+
+.float-btn:hover .tooltip {
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+@keyframes float-slow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes morph {
+    0% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+
+    34% {
+        border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+    }
+
+    67% {
+        border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+    }
+
+    100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.8rem;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .f3 {
+        display: none;
+    }
+}
